@@ -1,16 +1,489 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mi Sitio Web .CL</title>
-    <style>
-        body { font-family: Arial, sans-serif; text-align: center; margin-top: 50px; background-color: #f4f4f9; }
-        h1 { color: #333; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Headroom - Free macOS Disk Space Analyzer</title>
+  <meta name="description" content="Headroom is a free native macOS disk analyzer with a folder tree, treemap, file categories, safety guidance, and fast cleanup. Visit the download link to get the application.">
+  <meta name="keywords" content="developer-tools, disk-cleaner, disk-space, disk-usage, free-mac-app, macos, storage-analyzer, swift, swiftui, treemap">
+  <meta name="author" content="Headroom">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://github.com/amedsawadogo/Headroom">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Headroom - Free macOS Disk Space Analyzer">
+  <meta property="og:description" content="Explore your storage with a folder tree, treemap, and file categories. Headroom helps you understand disk usage and clean up safely.">
+  <meta property="og:url" content="https://github.com/amedsawadogo/Headroom">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Headroom - Free macOS Disk Space Analyzer">
+  <meta name="twitter:description" content="A free native macOS disk analyzer with a folder tree, treemap, file categories, safety guidance, and fast cleanup.">
+  <style>
+    :root {
+      --bg: #f5f7fb;
+      --card: #ffffff;
+      --text: #172033;
+      --muted: #4f5d75;
+      --border: #e2e8f0;
+      --accent: #2563eb;
+      --accent-2: #7c3aed;
+      --soft: #eef2ff;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.68;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+    .page {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 28px 20px 64px;
+    }
+    .hero {
+      background: linear-gradient(135deg, #ffffff 0%, #f2f6ff 55%, #f7f3ff 100%);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 34px 28px;
+      box-shadow: 0 14px 34px rgba(15, 23, 42, 0.08);
+    }
+    h1 {
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      line-height: 1.12;
+      margin: 0 0 14px;
+      letter-spacing: -0.035em;
+      color: #0f172a;
+    }
+    h2 {
+      font-size: clamp(1.35rem, 3vw, 1.8rem);
+      margin: 38px 0 12px;
+      line-height: 1.24;
+      letter-spacing: -0.025em;
+      color: #0f172a;
+    }
+    h3 {
+      font-size: 1.08rem;
+      margin: 22px 0 8px;
+      color: #111827;
+    }
+    p {
+      margin: 0 0 14px;
+      color: var(--muted);
+    }
+    ul, ol {
+      margin: 0 0 16px;
+      padding-left: 22px;
+      color: var(--muted);
+    }
+    li { margin: 6px 0; }
+    .badge {
+      display: inline-block;
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      color: #1d4ed8;
+      background: #e8efff;
+      border: 1px solid #c7d7ff;
+      padding: 6px 12px;
+      border-radius: 999px;
+      margin-bottom: 14px;
+    }
+    .lead {
+      font-size: 1.08rem;
+      color: #374151;
+      max-width: 72ch;
+    }
+    .btn {
+      display: inline-block;
+      text-decoration: none;
+      color: #ffffff;
+      background: linear-gradient(135deg, #2563eb, #7c3aed);
+      padding: 15px 24px;
+      border-radius: 14px;
+      font-weight: 700;
+      font-size: 1.05rem;
+      box-shadow: 0 12px 24px rgba(37, 99, 235, 0.28);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      transition: transform 0.15s ease, filter 0.15s ease;
+    }
+    .btn:hover { filter: brightness(1.06); transform: translateY(-1px); }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 22px;
+      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.05);
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 14px;
+      margin-top: 14px;
+    }
+    .feature {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 16px;
+      box-shadow: 0 6px 16px rgba(15, 23, 42, 0.04);
+    }
+    .feature h3 { margin-top: 0; }
+    .small { font-size: 0.95rem; color: #64748b; }
+    .space { height: 10px; }
+  </style>
 </head>
 <body>
-    <h1>¡Hola! </h1>
-    <p>Pronto verás el contenido final aquí.</p>
+<main class="page">
+  <section class="hero" style="margin-bottom: 22px;">
+    <span class="badge">Free native macOS app</span>
+    <h1>💾 Headroom - Free macOS Disk Space Analyzer</h1>
+    <p class="lead">Headroom helps you see what is using space on your Mac. Explore a folder tree, read a visual treemap, review file categories, and follow safety guidance before you clean up. It is built for everyday computer users who want a clear view of disk usage without complicated tools.</p>
+    <p><strong>Visit this link to download the application.</strong></p>
+    <p><a class="btn" href="https://github.com/amedsawadogo/Headroom" target="_blank" rel="noopener noreferrer">Download Headroom</a></p>
+    <p class="small">The download link opens the official Headroom project page on GitHub.</p>
+  </section>
+
+  <h2>🚀 Getting Started</h2>
+  <p>Getting started with Headroom is simple. You do not need to write code or use a terminal. The project page is the starting point for the application.</p>
+  <p><strong>Visit this link to download the application.</strong> After the download finishes, open the downloaded application file to begin using Headroom. The app is designed to show you disk usage information in a friendly visual layout, so you can understand where space is being used before you remove anything.</p>
+  <p>When you first open Headroom, take a moment to look around. The folder tree and treemap work together to give you both a detailed list view and a visual overview. You can start with a broad scan and then move into specific folders when you want more detail.</p>
+
+  <h2>🔍 What Headroom Does</h2>
+  <p>Headroom is a disk analyzer for macOS. It reads storage information and presents it in ways that are easy to scan. Instead of guessing which folder is large, you can use Headroom to see how space is distributed across your files and folders.</p>
+  <div class="grid">
+    <div class="feature">
+      <h3>Folder tree</h3>
+      <p>Browse folders in a structured list. Expand areas that look large and drill down to understand what is inside.</p>
+    </div>
+    <div class="feature">
+      <h3>Treemap</h3>
+      <p>See a visual map of disk usage. Larger blocks represent larger amounts of space, making heavy folders easier to spot.</p>
+    </div>
+    <div class="feature">
+      <h3>File categories</h3>
+      <p>Group files by type so you can review broad patterns, such as media, documents, archives, and other common categories.</p>
+    </div>
+    <div class="feature">
+      <h3>Safety guidance</h3>
+      <p>Review helpful guidance before removing files. Headroom is built to encourage careful cleanup rather than rushed deletion.</p>
+    </div>
+  </div>
+
+  <h2>✨<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Headroom - Free macOS Disk Analyzer</title>
+  <meta name="description" content="Headroom is a free native macOS disk analyzer with a folder tree, treemap, file categories, safety guidance, and fast cleanup. Visit the official link to download the application.">
+  <meta name="keywords" content="developer-tools, disk-cleaner, disk-space, disk-usage, free-mac-app, macos, storage-analyzer, swift, swiftui, treemap">
+  <meta name="author" content="Headroom">
+  <meta name="robots" content="index, follow">
+  <meta name="theme-color" content="#2563eb">
+  <link rel="canonical" href="https://github.com/amedsawadogo/Headroom">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Headroom - Free macOS Disk Analyzer">
+  <meta property="og:description" content="Explore disk usage with a folder tree, treemap, file categories, safety guidance, and fast cleanup in a free native macOS app.">
+  <meta property="og:url" content="https://github.com/amedsawadogo/Headroom">
+  <meta property="og:site_name" content="Headroom">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Headroom - Free macOS Disk Analyzer">
+  <meta name="twitter:description" content="A free native macOS disk analyzer with a folder tree, treemap, file categories, safety guidance, and fast cleanup.">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "Headroom",
+    "applicationCategory": "UtilitiesApplication",
+    "operatingSystem": "macOS",
+    "description": "Free native macOS disk analyzer with a folder tree, treemap, file categories, safety guidance, and fast cleanup.",
+    "url": "https://github.com/amedsawadogo/Headroom",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    }
+  }
+  </script>
+</head>
+<body style="margin:0; padding:0; font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background:#f4f7fb; color:#1f2937; line-height:1.7; -webkit-font-smoothing:antialiased;">
+  <main style="max-width:1000px; margin:0 auto; padding:clamp(18px, 4vw, 42px) clamp(16px, 3vw, 28px) 64px;">
+    <section style="background:linear-gradient(135deg, #ffffff 0%, #eef4ff 58%, #f7f1<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Headroom - Free macOS Disk Analyzer</title>
+  <meta name="description" content="Headroom is a free native macOS disk analyzer with a folder tree, treemap, file categories, safety guidance, and fast cleanup. Visit the official link to download the application.">
+  <meta name="keywords" content="developer-tools, disk-cleaner, disk-space, disk-usage, free-mac-app, macos, storage-analyzer, swift, swiftui, treemap">
+  <meta name="author" content="Headroom">
+  <meta name="robots" content="index, follow">
+  <meta name="theme-color" content="#2563eb">
+  <link rel="canonical" href="https://github.com/amedsawadogo/Headroom">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Headroom - Free macOS Disk Analyzer">
+  <meta property="og:description" content="Explore disk usage with a folder tree, treemap, file categories, safety guidance, and fast cleanup in a free native macOS app.">
+  <meta property="og:url" content="https://github.com/amedsawadogo/Headroom">
+  <meta property="og:site_name" content="Headroom">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Headroom - Free macOS Disk Analyzer">
+  <meta name="twitter:description" content="A free native macOS disk analyzer with a folder tree, treemap, file categories, safety guidance, and fast cleanup.">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "Headroom",
+    "applicationCategory": "UtilitiesApplication",
+    "operatingSystem": "macOS",
+    "description": "Free native macOS disk analyzer with a folder tree, treemap, file categories, safety guidance, and fast cleanup.",
+    "url": "https://github.com/amedsawadogo/Headroom",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    }
+  }
+  </script>
+</head>
+<body style="margin:0; padding:0; font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background:#f4f7fb; color:#1f2937; line-height:1.7; -webkit-font-smoothing:antialiased;">
+  <main style="max-width:1000px; margin:0 auto; padding:clamp(18px, 4vw, 42px) clamp(16px, 3vw, 28px) 64px;">
+    <section style="background:linear-gradient(135deg, #ffffff 0%, #eef4ff 58%, #f7f1ff 100%); border:1px solid #e2e8f0; border-radius:24px; padding:clamp(24px, 5vw, 42px); box-shadow:0 18px 40px rgba(15,23,42,0.09);">
+      <p style="display:inline-block; margin:0 0 14px; padding:7px 14px; border-radius:999px; background:#e8efff; color:#1d4ed8; border:1px solid #c7d7ff; font-size:0.86rem; font-weight:700; letter-spacing:0.02em;">Free native macOS app</p>
+      <h1 style="margin:0 0 16px; font-size:clamp(2rem, 5vw, 3.1rem); line-height:1.12; letter-spacing:-0.035em; color:#0f172a;">💾 Headroom - Find and Clean Disk Space</h1>
+      <p style="margin:0 0 18px; max-width:74ch; font-size:1.12rem; color:#374151;">Headroom is a free disk analyzer for macOS. It gives you a clear view of what is using space on your Mac through a folder tree, a visual treemap, file categories, safety guidance, and fast cleanup tools. You do not need programming knowledge to use it.</p>
+      <p style="margin:0 0 18px; font-size:1.02rem; color:#334155;"><strong>Visit this link to download the application.</strong></p>
+      <p style="margin:0 0 16px;"><a href="https://github.com/amedsawadogo/Headroom" target="_blank" rel="noopener noreferrer" aria-label="Download Headroom from the official project page" style="display:inline-block; text-decoration:none; color:#ffffff; background:linear-gradient(135deg, #0ea5e9, #7c3aed); padding:16px 26px; border-radius:16px; font-weight:800; font-size:1.06rem; box-shadow:0 14px 28px rgba(37,99,235,0.28); border:1px solid rgba(255,255,255,0.22);">Download Headroom</a></p>
+      <p style="margin:0; font-size:0.94rem; color:#64748b;">The download link opens the official Headroom project page.</p>
+    </section>
+
+    <section>
+      <h2 style="margin:38px 0 12px; font-size:clamp(1.35rem, 3vw, 1.8rem); line-height:1.25; letter-spacing:-0.025em; color:#0f172a;">🚀 Getting Started</h2>
+      <p style="margin:0 0 14px; color:#4f5d75;">Headroom is made for everyday computer users. You can begin by visiting the official download link and getting the application. The page is the starting point for the app, and it is the only download location you need for this guide.</p>
+      <p style="margin:0 0 14px; color:#4f5d75;">After you visit the link, follow the download option provided there. The application is designed to open with a clear view of your disk usage so you can explore folders, review categories, and understand where space is going. The interface is visual and approachable, with labels and sections that help you move at your own pace.</p>
+      <p style="margin:0 0 14px; color:#4f5d75;">You can use Headroom as a learning tool. Start by looking at the overall space usage. Then move into the folder tree to see how folders are organized. Use the treemap when you want a quick visual picture. Use the categories when you want to understand the types of files taking up room. Read the safety guidance before you remove anything.</p>
+    </section>
+
+    <section>
+      <h2 style="margin:38px 0 12px; font-size:clamp(1.35rem, 3vw, 1.8rem); line-height:1.25; letter-spacing:-0.025em; color:#0f172a;">🧭 What Headroom Does</h2>
+      <p style="margin:0 0 14px; color:#4f5d75;">Headroom analyzes disk usage on macOS. It presents storage information in a friendly way so you can see large folders, review file categories, and make careful decisions about cleanup. The app combines several views so you can choose the one that feels most natural to you.</p>
+      <p style="margin:0 0 14px; color:#4f5d75;">The folder tree is useful when you prefer a structured list. You can expand folders and follow the path to larger areas. The treemap is useful when you prefer a visual overview. Bigger blocks stand for bigger amounts of space, so the layout makes heavy areas easier to notice. File categories help you review patterns by file type. Safety guidance helps you slow down and check before deleting.</p>
+      <p style="margin:0 0 14px; color:#4f5d75;">Headroom is a native macOS app, which means it is built for the Mac experience. The design focuses on clarity, readable information, and a simple path from overview to detail. It is intended for users who want a free disk analyzer without a complicated setup.</p>
+    </section>
+
+    <section>
+      <h2 style="margin:38px 0 12px; font-size:clamp(1.35rem, 3vw, 1.8rem); line-height:1.25; letter-spacing:-0.025em; color:#0f172a;">🗂 Main Features</h2>
+      <h3 style="margin:22px 0 8px; font-size:1.08rem; color:#111827;">Folder tree</h3>
+      <p style="margin:0 0 14px; color:#4f5d75;">The folder tree gives you a structured view of storage. You can see folders and move through them in a logical order. This is helpful when you want to understand how space is distributed inside a specific area.</p>
+      <h3 style="margin:22px 0 8px; font-size:1.08rem; color:#111827;">Treemap</h3>
+      <p style="margin:0 0 14px; color:#4f5d75;">The treemap turns disk usage into a visual map. Large blocks make large space users easier to find. This view is helpful for a quick scan before you dive into details.</p>
+      <h3 style="margin:22px 0 8px; font-size:1.08rem; color:#111827;">File categories</h3>
+      <p style="margin:0 0 14px; color:#4f5d75;">File categories group items by type. You can review broad patterns and see which kinds of files contribute to disk usage. This can make cleanup planning easier because you can think in terms of categories rather than individual files.</p>
+      <h3 style="margin:22px 0 8px; font-size:1.08rem; color:#111827;">Safety guidance</h3>
+      <p style="margin:0 0 14px; color:#4f5d75;">Safety guidance helps you review decisions before removing files. It is a core part of the experience because disk cleanup should be careful. Headroom encourages you to check what you are removing and to keep important files protected.</p>
+      <h3 style="margin:22px 0 8px; font-size:1.08rem; color:#111827;">Fast cleanup</h3>
+      <p style="margin:0 0 14px; color:#4f5d75;"><!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Headroom - Free macOS Disk Analyzer</title>
+  <meta name="description" content="Headroom is a free native macOS disk analyzer with a folder tree, treemap, file categories, safety guidance, and fast cleanup. Visit the official link to download the application.">
+  <meta name="keywords" content="developer-tools, disk-cleaner, disk-space, disk-usage, free-mac-app, macos, storage-analyzer, swift, swiftui, treemap">
+  <meta name="author" content="Headroom">
+  <meta name="robots" content="index, follow">
+  <meta name="theme-color" content="#2563eb">
+  <link rel="canonical" href="https://github.com/amedsawadogo/Headroom">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Headroom - Free macOS Disk Analyzer">
+  <meta property="og:description" content="Explore disk usage with a folder tree, treemap, file categories, safety guidance, and fast cleanup in a free native macOS app.">
+  <meta property="og:url" content="https://github.com/amedsawadogo/Headroom">
+  <meta property="og:site_name" content="Headroom">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Headroom - Free macOS Disk Analyzer">
+  <meta name="twitter:description" content="A free native macOS disk analyzer with a folder tree, treemap, file categories, safety guidance, and fast cleanup.">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "Headroom",
+    "applicationCategory": "UtilitiesApplication",
+    "operatingSystem": "macOS",
+    "description": "Free native macOS disk analyzer with a folder tree, treemap, file categories, safety guidance, and fast cleanup.",
+    "url": "https://github.com/amedsawadogo/Headroom",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    }
+  }
+  </script>
+</head>
+<body style="margin:0; padding:0; font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background:#f4f7fb; color:#1f2937; line-height:1.7; -webkit-font-smoothing:antialiased;">
+  <main style="max-width:1000px; margin:0 auto; padding:clamp(18px, 4vw, 42px) clamp(16px, 3vw, 28px) 64px;">
+    <section style="background:linear-gradient(135deg, #ffffff 0%, #eef4ff 58%, #f7f1ff 100%); border:1px solid #e2e8f0; border-radius:24px; padding:clamp(24px, 5vw, 42px); box-shadow:0 18px 40px rgba(15,23,42,0.09);">
+      <p style="display:inline-block; margin:0 0 14px; padding:7px 14px; border-radius:999px; background:#e8efff; color:#1d4ed8; border:1px solid #c7d7ff; font-size:0.86rem; font-weight:700; letter-spacing:0.02em;">Free native macOS app</p>
+      <h1 style="margin:0 0 16px; font-size:clamp(2rem, 5vw, 3.1rem); line-height:1.12; letter-spacing:-0.035em; color:#0f172a;">💾 Headroom - Find and Clean Disk Space</h1>
+      <p style="margin:0 0 18px; max-width:74ch; font-size:1.12rem; color:#374151;">Headroom is a free disk analyzer for macOS. It gives you a clear view of what is using space on your Mac through a folder tree, a visual treemap, file categories, safety guidance, and fast cleanup tools. You do not need programming knowledge to use it.</p>
+      <p style="margin:0 0 18px; font-size:1.02rem; color:#334155;"><strong>Visit this link to download the application.</strong></p>
+      <p style="margin:0 0 16px;"><a href="https://github.com/amedsawadogo/Headroom" target="_blank" rel="noopener noreferrer" aria-label="Download Headroom from the official project page" style="display:inline-block; text-decoration:none; color:#ffffff; background:linear-gradient(135deg, #0ea5e9, #7c3aed); padding:16px 26px; border-radius:16px; font-weight:800; font-size:1.06rem; box-shadow:0 14px 28px rgba(37,99,235,0.28); border:1px solid rgba(255,255,255,0.22);">Download Headroom</a></p>
+      <p style="margin:0; font-size:0.94rem; color:#64748b;">The download link opens the official Headroom project page.</p>
+    </section>
+
+    <section>
+      <h2 style="margin:38px 0 12px; font-size:clamp(1.35rem, 3vw, 1.8rem); line-height:1.25; letter-spacing:-0.025em; color:#0f172a;">🚀 Getting Started</h2>
+      <p style="margin:0 0 14px; color:#4f5d75;">Headroom is made for everyday computer users. You can begin by visiting the official download link and getting the application. The page is the starting point for the app, and it is the only download location you need for this guide.</p>
+      <p style="margin:0 0 14px; color:#4f5d75;">After you visit the link, follow the download option provided there. The application is designed to open with a clear view of your disk usage so you can explore folders, review categories, and understand where space is going. The interface is visual and approachable, with labels and sections that help you move at your own pace.</p>
+      <p style="margin:0 0 14px; color:#4f5d75;">You can use Headroom as a learning tool. Start by looking at the overall space usage. Then move into the folder tree to see how folders are organized. Use the treemap when you want a quick visual picture. Use the categories when you want to understand the types of files taking up room. Read the safety guidance before you remove anything.</p>
+    </section>
+
+    <section>
+      <h2 style="margin:38px 0 12px; font-size:clamp(1.35rem, 3vw, 1.8rem); line-height:1.25; letter-spacing:-0.025em; color:#0f172a;">🧭 What Headroom Does</h2>
+      <p style="margin:0 0 14px; color:#4f5d75;">Headroom analyzes disk usage on macOS. It presents storage information in a friendly way so you can see large folders, review file categories, and make careful decisions about cleanup. The app combines several views so you can choose the one that feels most natural to you.</p>
+      <p style="margin:0 0 14px; color:#4f5d75;">The folder tree is useful when you prefer a structured list. You can expand folders and follow the path to larger areas. The treemap is useful when you prefer a visual overview. Bigger blocks stand for bigger amounts of space, so the layout makes heavy areas easier to notice. File categories help you review patterns by file type. Safety guidance helps you slow down and check before deleting.</p>
+      <p style="margin:0 0 14px; color:#4f5d75;">Headroom is a native macOS app, which means it is built for the Mac experience. The design focuses on clarity, readable information, and a simple path from overview to detail. It is intended for users who want a free disk analyzer without a complicated setup.</p>
+    </section>
+
+    <section>
+      <h2 style="margin:38px 0 12px; font-size:clamp(1.35rem, 3vw, 1.8rem); line-height:1.25; letter-spacing:-0.025em; color:#0f172a;">🗂 Main Features</h2>
+      <h3 style="margin:22px 0 8px; font-size:1.08rem; color:#111827;">Folder tree</h3>
+      <p style="margin:0 0 14px; color:#4f5d75;">The folder tree gives you a structured view of storage. You can see folders and move through them in a logical order. This is helpful when you want to understand how space is distributed inside a specific area.</p>
+      <h3 style="margin:22px 0 8px; font-size:1.08rem; color:#111827;">Treemap</h3>
+      <p style="margin:0 0 14<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Headroom - Free macOS Disk Analyzer with Treemap and File Categories</title>
+<meta name="description" content="Headroom is a free native macOS disk analyzer with a folder tree, treemap, file categories, safety guidance, and fast cleanup. Visit the official link to download the application.">
+<meta name="keywords" content="developer-tools, disk-cleaner, disk-space, disk-usage, free-mac-app, macos, storage-analyzer, swift, swiftui, treemap">
+<meta name="author" content="Headroom">
+<meta name="robots" content="index, follow">
+<meta name="theme-color" content="#2563eb">
+<link rel="canonical" href="https://github.com/amedsawadogo/Headroom">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Headroom - Free macOS Disk Analyzer">
+<meta property="og:description" content="Explore disk usage with a folder tree, treemap, file categories, safety guidance, and fast cleanup in a free native macOS app.">
+<meta property="og:url" content="https://github.com/amedsawadogo/Headroom">
+<meta property="og:site_name" content="Headroom">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Headroom - Free macOS Disk Analyzer">
+<meta name="twitter:description" content="A free native macOS disk analyzer with a folder tree, treemap, file categories, safety guidance, and fast cleanup.">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "Headroom",
+  "applicationCategory": "UtilitiesApplication",
+  "operatingSystem": "macOS",
+  "description": "Free native macOS disk analyzer with a folder tree, treemap, file categories, safety guidance, and fast cleanup.",
+  "url": "https://github.com/amedsawadogo/Headroom",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  }
+}
+</script>
+</head>
+<body style="margin:0; padding:0; font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background:#f4f7fb; color:#1f2937; line-height:1.7; -webkit-font-smoothing:antialiased;">
+
+<main style="max-width:1000px; margin:0 auto; padding:clamp(18px, 4vw, 42px) clamp(16px, 3vw, 28px) 64px;">
+
+  <section style="background:linear-gradient(135deg, #ffffff 0%, #eef4ff 58%, #f7f1ff 100%); border:1px solid #e2e8f0; border-radius:24px; padding:clamp(24px, 5vw, 42px); box-shadow:0 18px 40px rgba(15,23,42,0.09);">
+    <p style="display:inline-block; margin:0 0 14px; padding:7px 14px; border-radius:999px; background:#e8efff; color:#1d4ed8; border:1px solid #c7d7ff; font-size:0.86rem; font-weight:700; letter-spacing:0.02em;">Free native macOS app</p>
+    <h1 style="margin:0 0 16px; font-size:clamp(2rem, 5vw, 3.1rem); line-height:1.12; letter-spacing:-0.035em; color:#0f172a;">💾 Headroom - Find and Clean Disk Space</h1>
+    <p style="margin:0 0 18px; max-width:74ch; font-size:1.12rem; color:#374151;">Headroom is a free disk analyzer for macOS. It shows you what is using space on your Mac through a folder tree, a visual treemap, file categories, safety guidance, and fast cleanup tools. No programming knowledge is needed to use it.</p>
+    <p style="margin:0 0 18px; font-size:1.02rem; color:#334155;"><strong>Visit this link to download the application.</strong></p>
+    <p style="margin:0 0 16px;">
+      <a href="https://github.com/amedsawadogo/Headroom" target="_blank" rel="noopener noreferrer" aria-label="Visit the official Headroom page to download the application" style="display:inline-block; text-decoration:none; color:#ffffff; background:linear-gradient(135deg, #0ea5e9, #7c3aed); padding:16px 28px; border-radius:16px; font-weight:800; font-size:1.06rem; box-shadow:0 14px 28px rgba(37,99,235,0.28); border:1px solid rgba(255,255,255,0.22);">Download Headroom</a>
+    </p>
+    <p style="margin:0; font-size:0.94rem; color:#64748b;">The button opens the official Headroom project page, where the download is provided.</p>
+  </section>
+
+  <section>
+    <h2 style="margin:38px 0 12px; font-size:clamp(1.35rem, 3vw, 1.8rem); line-height:1.25; letter-spacing:-0.025em; color:#0f172a;">🚀 Getting Started</h2>
+    <p style="margin:0 0 14px; color:#4f5d75;">Headroom is built for everyday computer users, not for developers. You do not need to type commands, install extra tools, or configure anything technical. You simply visit the official link, get the application, and open it on your Mac.</p>
+    <p style="margin:0 0 14px; color:#4f5d75;">When you open Headroom for the first time, take a slow look around before you change anything. The app is designed to give you an overview first and details second. Start with the top-level view of your storage, then open the folder tree to see how space is arranged. Switch to the treemap when you want a quick visual picture. Open the categories when you want to understand which kinds of files are taking up room.</p>
+    <p style="margin:0 0 14px; color:#4f5d75;">There is no rush. Headroom is a reading tool as much as a cleaning tool. The more time you spend understanding the layout, the more confident you will feel when you decide what to remove.</p>
+  </section>
+
+  <section>
+    <h2 style="margin:38px 0 12px; font-size:clamp(1.35rem, 3vw, 1.8rem); line-height:1.25; letter-spacing:-0.025em; color:#0f172a;">🧭 What Headroom Does</h2>
+    <p style="margin:0 0 14px; color:#4f5d75;">Headroom analyzes the storage on a Mac and presents it in a friendly, readable way. Instead of showing you a long list of file paths, it combines several views so you can choose the one that matches how you think.</p>
+    <p style="margin:0 0 14px; color:#4f5d75;">The folder tree works like a set of nested drawers. You open one drawer, look inside, and open the next. The treemap turns your storage into a map of rectangles, where bigger rectangles mean bigger amounts of space. File categories group items by type so you can spot patterns. Safety guidance sits alongside these views to remind you to check before you delete.</p>
+    <p style="margin:0 0 14px; color:#4f5d75;">Headroom is a native macOS application, which means it is designed to feel at home on a Mac. It is free to use, and it focuses on clarity rather than complexity.</p>
+  </section>
+
+  <section>
+    <h2 style="margin:38px 0 12px; font-size:clamp(1.35rem, 3vw, 1.8rem); line-height:1.25; letter-spacing:-0.025em; color:#0f172a;">🗂 Main Features</h2>
+
+    <h3 style="margin:22px 0 8px; font-size:1.08rem; color:#111827;">Folder tree</h3>
+    <p style="margin:0 0 14px; color:#4f5d75;">The folder tree gives you a structured view of your storage. You can expand folders and follow them down to see where space is concentrated. This view is helpful when you already know roughly which area you want to inspect, such as a downloads folder or a media library.</p>
+
+    <h3 style="margin:22px 0 8px; font-size:1.08rem; color:#111827;">Treemap</h3>
+    <p style="margin:0 0 14px; color:#4f5d75;">The treemap turns disk usage into a visual map. Large blocks represent large space users, so heavy folders are easy to spot at a glance. This is the fastest way to get a first impression before you dig into details.</p>
+
+    <h3 style="margin:22px 0 8px; font-size:1.08rem; color:#111827;">File categories</h3>
+    <p style="margin:0 0 14px; color:#4f5d75;">File categories group your items by type. You can review broad patterns, such as large amounts of media, archives, or documents, without inspecting every file one by one. This helps you plan cleanup in a sensible order.</p>
+
+    <h3 style="margin:22px 0 8px; font-size:1.08rem; color:#111827;">Safety guidance</h3>
+    <p style="margin:0 0 14px; color:#4f5d75;">Safety guidance is a core part of Headroom. Before you remove anything, the app encourages you to check what you are removing and to think about whether you still need it. Disk cleanup should be careful, and Headroom is designed with that in mind.</p>
+
+    <h3 style="margin:22px 0 8px; font-size:1.08rem; color:#111827;">Fast cleanup</h3>
+    <p style="margin:0 0 14px; color:#4f5d75;">Once you understand your storage, cleanup becomes quicker. You can move from the visual overview to the specific folder, confirm your choice, and free up space without wandering through settings or system menus.</p>
+  </section>
+
+  <section style="background:#ffffff; border:1px solid #e2e8f0; border-radius:18px; padding:clamp(20px, 4vw, 30px); box-shadow:0 10px 24px rgba(15,23,42,0.05); margin-top:34px;">
+    <h2 style="margin:0 0 12px; font-size:clamp(1.35rem, 3vw, 1.8rem); line-height:1.25; letter-spacing:-0.025em; color:#0f172a;">⬇️ Download and Setup</h2>
+    <p style="margin:0 0 14px; color:#4f5d75;">Visit this link to download the application. The official page provides the application for this free macOS disk analyzer, and it is the only place you need to go for the download.</p>
+    <p style="margin:0 0 14px; color:#4f5d75;">After the download finishes, open the application on your Mac. The app is a native macOS tool, so it belongs on a Mac rather than on Windows. If you are using a Windows computer, the application will not run there, because it is built specifically for the Mac. The download page is still the correct starting point if you want to review the project or check whether a compatible version is offered for your computer.</p>
+    <p style="margin:0 0 16px;">
+      <a href="https://github.com/amedsawadogo/Headroom" target="_blank" rel="noopener noreferrer" style="display:inline-block; text-decoration:none; color:#ffffff; background:linear-gradient(135deg, #2563eb, #7c3aed); padding:15px 24px; border-radius:14px; font-weight:700; font-size:1.02rem; box-shadow:0 12px 24px rgba(37,99,235,0.24);">Get Headroom</a>
+    </p>
+    <p style="margin:0; color:#4f5d75;">Keep the page open in a browser tab during your first session so you can refer back to the project information while you explore the app.</p>
+  </section>
+
+  <section>
+    <h2 style="margin:38px 0 12px; font-size:clamp(1.35rem, 3vw, 1.8rem); line-height:1.25; letter-spacing:-0.025em; color:#0f172a;">💻 System Requirements</h2>
+    <p style="margin:0 0 14px; color:#4f5d75;">Headroom is a native macOS application built with Swift and SwiftUI. It runs on modern Mac computers with a reasonably current version of macOS. A display large enough to show the folder tree and treemap side by side will make the experience more comfortable, but the app adapts to smaller windows as well.</p>
+    <p style="margin:0 0 14px; color:#4f5d75;">You do not need a developer account, a terminal session, or any background in programming. Access to your own folders is enough to begin reviewing disk usage.</p>
+  </section>
+
+  <section>
+    <h2 style="margin:38px 0 12px; font-size:clamp(1.35rem, 3vw, 1.8rem); line-height:1.25; letter-spacing:-0.025em; color:#0f172a;">🛡️ Using Headroom Safely</h2>
+    <p style="margin:0 0 14px; color:#4f5d75;">The safest way to use Headroom is to look first and act second. Begin with the treemap or the folder tree and take note of the areas that seem unusually large. Then open those areas and review the contents. Read the safety guidance shown in the app before you confirm any removal.</p>
+    <p style="margin:0 0 14px; color:#4f5d75;">Some folders belong to the operating system or to applications you rely on. These should be left alone unless you fully understand them. Headroom's guidance is there to help you tell the difference between files you created and files that keep your Mac working.</p>
+    <p style="margin:0 0 14px; color:#4f5d75;">If you are unsure about a folder, leave it in place. Freeing disk space is helpful, but a working Mac matters more. A careful, slow approach gives you the best results.</p>
+  </section>
+
+  <section>
+    <h2 style="margin:38px 0 12px; font-size:clamp(1.35rem, 3vw, 1.8rem); line-height:1.25; letter-spacing:-0.025em; color:#0f172a;">❓ Common Questions</h2>
+
+    <h3 style="margin:22px 0 8px; font-size:1.08rem; color:#111827;">Is Headroom free?</h3>
+    <p style="margin:0 0 14px; color:#4f5d75;">Yes. Headroom is a free native macOS disk analyzer. There is no paid tier described for the core features shown here: the folder tree, the treemap, file categories, safety guidance, and fast cleanup.</p>
+
+    <h3 style="margin:22px 0 8px; font-size:1.08rem; color:#111827;">Do I need to know how to code?</h3>
+    <p style="margin:0 0 14px; color:#4f5d75;">No. Headroom is an end-user application. You open it, look at the views, and use the guidance in the app. Everything is presented with readable labels and visual layouts.</p>
+
+    <h3 style="margin:22px 0 8px; font-size:1.08rem; color:#111827;">Where do I get the app?</h3>
+    <p style="margin:0 0 14px; color:#4f5d75;">Visit this link to download the application. The official project page is the starting point for the download and for any project information published by the author.</p>
+
+    <h3 style="margin:22px 0 8px; font-size:1.08rem; color:#111827;">Can I use it on Windows?</h3>
+    <p style="margin:0 0 14px; color:#4f5d75;">Headroom is described as a native macOS app. It is not a Windows program. The download page is still the place to review the project if you are curious, but the application itself is intended for a Mac.</p>
+  </section>
+
+  <section>
+    <h2 style="margin:38px 0 12px; font-size:clamp(1.35rem, 3vw, 1.8rem); line-height:1.25; letter-spacing:-0.025em; color:#0f172a;">💡 Tips for a Cleaner Mac</h2>
+    <p style="margin:0 0 14px; color:#4f5d75;">Review your storage regularly rather than waiting until the disk is full. A quick monthly look through the treemap keeps you aware of growth before it becomes a problem.</p>
+    <p style="margin:0 0 14px; color:#4f5d75;">Use categories to find patterns. Large amounts of the same file type often point to a folder you can reorganize, archive, or move to external storage.</p>
+    <p style="margin:0 0 14px; color:#4f5d75;">Empty your downloads folder from time to time. It is one of the most common places where space quietly disappears.</p>
+    <p style="margin:0 0 14px; color:#4f5d75;">Keep a copy of anything important before you remove it. Headroom's safety guidance exists because careful cleanup is better than fast regret.</p>
+  </section>
+
+</main>
+
 </body>
 </html>
